@@ -29,3 +29,11 @@ connection --> Host: db
 Password: Pa$$w0rd
 
 And you're done! If all went well, you can see the dummy data loaded into the database.
+
+## manage.py
+
+If we need to do a database migration, we can use the manage.py command in Docker-compose:
+
+```bash
+docker-compose run web python manage.py migrate
+```

@@ -39,6 +39,6 @@ services:
       - DJANGO_SUPERUSER_EMAIL=dev-admin@hyper.com
       - DJANGO_SUPERUSER_PASSWORD=dev-admin
     depends_on:
-      - db, pgadmin
+      - db
 volumes:
   pgadmin:
