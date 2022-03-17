@@ -10,10 +10,14 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
   </head>
-  {% block nav %}{% include 'navigation.html' %}{% endblock nav %}
-  <br />
-  {% block content %}{% endblock content %}
-  <br />
-  {% block footer %}{% include 'footer.html' %}{% endblock footer %}
-  <body></body>
+
+  <body>
+    {% block nav %}{% include 'navigation.html' %}{% endblock nav %}
+    <br />
+    {% block search %}{% include 'search.html' %}{% endblock search %}
+    <br />
+    {% block content %}{% endblock content %}
+    <br />
+    {% block footer %}{% include 'footer.html' %}{% endblock footer %}
+  </body>
 </html>

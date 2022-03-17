@@ -1,1 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %} {% for book in books %}
+<div class="card">
+  {{book.title}}
+  <img
+    src="{{book.thumbnail}}"
+    alt="thumbnail for
+  {{book.title}}"
+  />
+</div>
+{% empty %}
+<h3>Search for books</h3>
+{% endfor %} {% endblock %}

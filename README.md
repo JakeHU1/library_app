@@ -37,3 +37,9 @@ If we need to do a database migration, we can use the manage.py command in Docke
 ```bash
 docker-compose run web python manage.py migrate
 ```
+
+If we need to create new models based on the existing database, run the following command:
+
+```bash
+docker-compose run web python manage.py inspectdb > models.py
+```
