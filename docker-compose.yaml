@@ -41,5 +41,6 @@ services:
       - DJANGO_SUPERUSER_PASSWORD=dev-admin
     depends_on:
       - db
+      - pgadmin
 volumes:
   pgadmin:
