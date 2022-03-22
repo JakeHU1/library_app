@@ -7,21 +7,17 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{title}}</title>
-
-  <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
+  <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="{% static 'bootstrap.js' %}"></script>
+  <title>Hello World</title>
 </head>
 
 <body>
-  <div class="wrapper">
-    <div class="header">
-      <div class="logo">
-        <h1>BookStore</h1>
-      </div>
-      <input type="text" class="search" placeholder="Search book...">
-      {% block nav %}{% include 'navigation.html' %}{% endblock nav %}
-    </div>
+  {% include 'messages.html' %}
+  <div class="header">
+    {% block nav %}{% include 'navigation.html' %}{% endblock %}
   </div>
+  {% block content %}{% endblock %}
 </body>
 
 </html>

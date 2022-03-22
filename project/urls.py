@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from project.apps.books import views as books_views
 from project.apps.auth import views as auth_views
+from django.urls import include
+from django.contrib.auth import views as django_auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,8 +27,16 @@ urlpatterns = [
     path('login/', auth_views.login),
     path('logout/', auth_views.logout),
     path('register/', auth_views.register),
+    path('password_reset', auth_views.password_reset, name='password_reset'),
+    path('password_reset/done/', django_auth_views.PasswordResetDoneView.as_view(
+        template_name='password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', django_auth_views.PasswordResetConfirmView.as_view(
+        template_name='password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/done/', django_auth_views.PasswordResetCompleteView.as_view(
+        template_name='password_reset_complete.html'), name='password_reset_complete'),
+
     # books
-    path('books/', books_views.books),
-    path('books/<book>/', books_views.book_detail),
+    # path('books/', books_views.books),
+    # path('books/<book>/', books_views.book_detail),
 
 ]
