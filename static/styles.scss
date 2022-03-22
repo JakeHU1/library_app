@@ -1,0 +1,46 @@
+// variables
+$background-color: rgb(241, 237, 222);
+$text-color: rgb(33, 38, 71);
+
+body {
+    background-color: #{$background-color};
+    margin: 1.5em;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+nav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    ul {
+        list-style-type: none;
+
+        display: flex;
+        margin: 2em;
+
+        a {
+            text-decoration: none;
+            color: #{$text-color};
+            margin: 10px;
+            &:hover {
+                background-color: bisque;
+            }
+        }
+    }
+}
+
+.search {
+    position: absolute;
+    width: 546px;
+    height: 57px;
+    left: 600px;
+    top: 68px;
+
+    background: #{$background-color};
+    border-radius: 94.2125px;
+}
