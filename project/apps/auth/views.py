@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+
+from project.apps.books.models import Reservations, Reservations_books
 from .forms import NewUserForm
 from django.contrib.auth import login as auth_login, authenticate, logout as auth_logout
 from django.contrib import messages
@@ -13,7 +15,11 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
+from django.db.models import Prefetch
+
 # Create your views here.
+
+# TODO: redirect to previous page instead of /
 
 
 def login(request):
@@ -83,3 +89,13 @@ def password_reset(request):
                     return redirect("/password_reset/done/")
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="password_reset.html", context={"password_reset_form": password_reset_form})
+
+
+def profile(request):
+    obj = {}
+    reservations = Reservations.objects.filter(customer_id=request.user.id)
+    for reservation in reservations:
+        obj[reservation.reservation_id] = Reservations_books.objects.filter(
+            reservation_id=reservation.reservation_id)
+    print(obj)
+    return render(request=request, template_name="profile.html", context={"reservations": obj})

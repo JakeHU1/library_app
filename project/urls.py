@@ -17,16 +17,25 @@ from django.contrib import admin
 from django.urls import path
 from project.apps.books import views as books_views
 from project.apps.auth import views as auth_views
-from django.urls import include
+from project.apps.book_cart import views as cart_views
 from django.contrib.auth import views as django_auth_views
+from django.urls import include
+
 
 urlpatterns = [
+    # books
     path('admin/', admin.site.urls),
     path('', books_views.index),
-    # auth
+    path('books/search', books_views.books),
+    path('books/<int:book_id>', books_views.book_detail),
+
+    # auth --> https://ordinarycoders.com/blog/article/django-user-register-login-logout
     path('login/', auth_views.login),
     path('logout/', auth_views.logout),
     path('register/', auth_views.register),
+    path('profile/', auth_views.profile),
+
+    # password_reset --> https://ordinarycoders.com/blog/article/django-password-reset
     path('password_reset', auth_views.password_reset, name='password_reset'),
     path('password_reset/done/', django_auth_views.PasswordResetDoneView.as_view(
         template_name='password_reset_done.html'), name='password_reset_done'),
@@ -35,8 +44,15 @@ urlpatterns = [
     path('reset/done/', django_auth_views.PasswordResetCompleteView.as_view(
         template_name='password_reset_complete.html'), name='password_reset_complete'),
 
-    # books
-    # path('books/', books_views.books),
-    # path('books/<book>/', books_views.book_detail),
+    # cart --> https://pypi.org/project/django-shopping-cart/
+    path('cart/add/<int:id>/', cart_views.cart_add, name='cart_add'),
+    path('cart/item_clear/<int:id>/', cart_views.item_clear, name='item_clear'),
+    path('cart/item_increment/<int:id>/',
+         cart_views.item_increment, name='item_increment'),
+    path('cart/item_decrement/<int:id>/',
+         cart_views.item_decrement, name='item_decrement'),
+    path('cart/cart_clear/', cart_views.cart_clear, name='cart_clear'),
+    path('cart/cart-detail/', cart_views.cart_detail, name='cart_detail'),
+
 
 ]

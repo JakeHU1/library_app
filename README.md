@@ -37,3 +37,5 @@ If we need to do a database migration, we can use the manage.py command in Docke
 ```bash
 docker-compose run web python manage.py migrate
 ```
+docker-compose run web python manage.py inspectdb > models_generated.py
+docker exec -t library_app_db_1 pg_dumpall -c -U postgres > dummy_final.sql

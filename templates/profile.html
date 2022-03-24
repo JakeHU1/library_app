@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>User profile</h1>
+{% if reservations %}
+{% for reservation in reservations %}
+{{ reservation }}
+<br>
+{% endfor %}
+{% else %}
+<p>You have no current reservations.</p>
+{% endif %}
+
+
+{% endblock %}

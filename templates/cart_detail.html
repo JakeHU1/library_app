@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load cart_tag %}
+{% block content %}
+
+<h1>Checkout</h1>
+<br>
+{% if request.session.cart.items %}
+<table class="table">
+    <tbody></tbody>
+    {% for key,value in request.session.cart.items %}
+    <tr>
+        <!-- <th scope="row">{{ forloop.counter }}</th> -->
+        <td><img src="{{value.image}}" alt=""></td>
+        <td>{{ value.name }}</td>
+        <td><a href="/cart/item_decrement/{{value.product_id}}"><svg class="svg-icon" viewBox="0 0 20 20">
+                    <path fill="none"
+                        d="M13.774,9.355h-7.36c-0.305,0-0.552,0.247-0.552,0.551s0.247,0.551,0.552,0.551h7.36
+        								c0.304,0,0.551-0.247,0.551-0.551S14.078,9.355,13.774,9.355z M10.094,0.875c-4.988,0-9.031,4.043-9.031,9.031
+        								s4.043,9.031,9.031,9.031s9.031-4.043,9.031-9.031S15.082,0.875,10.094,0.875z M10.094,17.809c-4.365,0-7.902-3.538-7.902-7.902
+        								c0-4.365,3.538-7.902,7.902-7.902c4.364,0,7.902,3.538,7.902,7.902C17.996,14.271,14.458,17.809,10.094,17.809z">
+                    </path>
+                </svg></a>
+            &nbsp;{{ value.quantity }}&nbsp; <a href="/cart/item_increment/{{value.product_id}}"><svg class="svg-icon"
+                    viewBox="0 0 20 20">
+                    <path fill="none" d="M13.68,9.448h-3.128V6.319c0-0.304-0.248-0.551-0.552-0.551S9.448,6.015,9.448,6.319v3.129H6.319
+                        								c-0.304,0-0.551,0.247-0.551,0.551s0.247,0.551,0.551,0.551h3.129v3.129c0,0.305,0.248,0.551,0.552,0.551s0.552-0.246,0.552-0.551
+                        								v-3.129h3.128c0.305,0,0.552-0.247,0.552-0.551S13.984,9.448,13.68,9.448z M10,0.968c-4.987,0-9.031,4.043-9.031,9.031
+                        								c0,4.989,4.044,9.032,9.031,9.032c4.988,0,9.031-4.043,9.031-9.032C19.031,5.012,14.988,0.968,10,0.968z M10,17.902
+                        								c-4.364,0-7.902-3.539-7.902-7.903c0-4.365,3.538-7.902,7.902-7.902S17.902,5.635,17.902,10C17.902,14.363,14.364,17.902,10,17.902
+                        								z"></path>
+                </svg></a>
+        </td>
+        <td>€{{ value.price }}</td>
+        <td><a class="btn btn-danger" href="/cart/item_clear/{{value.product_id}}">Remove book</a></td>
+    </tr>
+    <br>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Total:</td>
+        <td>€{{ total|floatformat:2 }}</td>
+        <td><a class="btn btn-success" href="/cart/cart_clear/">Reserve books</a></td>
+    </tr>
+    </tbody>
+</table>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}

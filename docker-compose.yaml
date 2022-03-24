@@ -7,11 +7,18 @@ services:
     image: postgres
     volumes:
       - ./dev-data/db:/var/lib/postgresql/data
-      - ./dev-data/data/backup.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
+      # - ./dev-data/data/dummy_final.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - PGUSER=postgres
+    # check whether the database is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
@@ -26,7 +33,7 @@ services:
     restart: unless-stopped
   web:
     build: .
-    command: bash -c "python manage.py migrate && python manage.py createsuperuser --noinput || echo 'user exists' && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py createsuperuser --noinput || echo 'user exists' && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
@@ -39,8 +46,9 @@ services:
       - DJANGO_SUPERUSER_USERNAME=dev-admin
       - DJANGO_SUPERUSER_EMAIL=dev-admin@hyper.com
       - DJANGO_SUPERUSER_PASSWORD=dev-admin
+    # wait on the database to be ready
     depends_on:
-      - db
-      - pgadmin
+      db:
+        condition: service_healthy
 volumes:
   pgadmin:
