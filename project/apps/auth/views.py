@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-
-from project.apps.books.models import Reservations, Reservations_books
+from project.apps.books.models import Reservations, Reservations_books, Book
 from .forms import NewUserForm
 from django.contrib.auth import login as auth_login, authenticate, logout as auth_logout
 from django.contrib import messages
@@ -15,7 +14,10 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-from django.db.models import Prefetch
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
+import csv
 
 # Create your views here.
 
@@ -90,12 +92,78 @@ def password_reset(request):
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="password_reset.html", context={"password_reset_form": password_reset_form})
 
+# TODO: increase efficiency of these queries
+
 
 def profile(request):
-    obj = {}
-    reservations = Reservations.objects.filter(customer_id=request.user.id)
+    # kek
+    books = []
+    quantities = []
+    prices = []
+    reservation_ids = []
+    books_obj = {}
+    quantities_obj = {}
+    prices_obj = {}
+
+    reservations = Reservations.objects.filter(customer_id=request.user)
     for reservation in reservations:
-        obj[reservation.reservation_id] = Reservations_books.objects.filter(
+        book_ids = Reservations_books.objects.filter(
             reservation_id=reservation.reservation_id)
-    print(obj)
-    return render(request=request, template_name="profile.html", context={"reservations": obj})
+        for book in book_ids:
+            books.append(Book.objects.get(id=book.book_id).title)
+            quantities.append(book.quantity)
+            prices.append(Book.objects.get(id=book.book_id).price)
+        reservation_ids.append(reservation.reservation_id)
+        books_obj[reservation.reservation_id] = books
+        quantities_obj[reservation.reservation_id] = quantities
+        prices_obj[reservation.reservation_id] = prices
+        books = []
+        quantities = []
+        prices = []
+
+    # random figure
+    data = [8, 12, 15, 17, 18, 18.5]
+
+    perc = np.linspace(0, 100, len(data))
+
+    fig = plt.figure(1, (7, 4))
+    ax = fig.add_subplot(1, 1, 1)
+
+    ax.plot(perc, data)
+
+    fmt = '%.0f%%'
+    xticks = mtick.FormatStrFormatter(fmt)
+    ax.xaxis.set_major_formatter(xticks)
+
+    plt.savefig("./static/images/test1.png")
+
+    return render(request=request, template_name="profile.html", context={"reservations": reservation_ids, "books": books_obj, "quantities": quantities_obj, "prices": prices_obj})
+
+
+def get_overview(request):
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="Books_overview.csv"'},
+    )
+
+    writer = csv.writer(response)
+
+    writer.writerow(['Reservation', 'Titles', 'Quantities', 'Prices', 'Total'])
+    reservations = Reservations.objects.filter(customer_id=request.user)
+    for reservation in reservations:
+        queryset = Reservations_books.objects.filter(
+            reservation_id=reservation.reservation_id)
+        titles = []
+        quantities = []
+        prices = []
+        total = 0
+        for item in queryset:
+            titles.append(Book.objects.get(id=item.book_id).title)
+            quantities.append(str(item.quantity))
+            prices.append(str(Book.objects.get(id=item.book_id).price))
+            total += Book.objects.get(id=item.book_id).price * item.quantity
+
+        writer.writerow([reservation.reservation_id,
+                        ", ".join(titles), ", ".join(quantities), ", ".join(prices), total])
+
+    return response

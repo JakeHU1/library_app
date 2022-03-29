@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
-from project.apps.books.models import Book, Library, Reservations, Reservations_books
+from project.apps.books.models import Book, Library, Reservations
 from django.contrib.auth.decorators import login_required
 from .cart import Cart
 from django.contrib import messages
 from django.db.models import F
-from django.contrib.auth.models import User
 
 
 @login_required(login_url="/login")
@@ -56,10 +55,13 @@ def cart_clear(request):
         library_book.save()
 
     # add new reservation for current user
-    Reservations.objects.create(customer=request.user)
+    n = Reservations.objects.create(customer=request.user)
 
-    # add books to the reservation
-    # TODO
+    # add books to reservations
+    for x in session:
+        book = session.get(x, {}).get('product_id')
+        quantity = session.get(x, {}).get('quantity')
+        n.books.add(book, through_defaults={'quantity': quantity})
 
     cart = Cart(request)
     cart.clear()

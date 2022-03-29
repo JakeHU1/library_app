@@ -38,3 +38,16 @@ SVG Icons - svgicons.sparkk.fr
   stroke: #4691f6;
   stroke-width: 1;
 }
+
+/* background light/dark mode */
+body {
+  background-color: white;
+}
+
+.dark-mode {
+  background-color: black;
+}
+
+.text-white {
+  color: white;
+}

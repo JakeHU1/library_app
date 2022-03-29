@@ -118,4 +118,4 @@ cython_debug/
 .pgadmin
 
 # dev-stuff
-dev-data
+dev-data/db

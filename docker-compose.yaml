@@ -7,7 +7,6 @@ services:
     image: postgres
     volumes:
       - ./dev-data/db:/var/lib/postgresql/data
-      # - ./dev-data/data/dummy_final.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres

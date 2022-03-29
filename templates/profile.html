@@ -2,14 +2,30 @@
 {% block content %}
 
 <h1>User profile</h1>
+userid: {{user.id}} <br>
 {% if reservations %}
 {% for reservation in reservations %}
-{{ reservation }}
+index: {{ forloop.counter }}<br>
+reservation_id: {{reservation}} <br>
+titles: {{books}} <br>
+quantities: {{quantities}} <br>
+prices: {{prices}} <br>
 <br>
 {% endfor %}
+
+
 {% else %}
 <p>You have no current reservations.</p>
 {% endif %}
+
+<form class="form-inline my-2 my-lg-0" action="/get_overview/" method="post">
+    {% csrf_token %}
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Download as csv</button>
+</form>
+
+{% load static %}
+<img src="{% static 'images/test1.png' %}"><br><br>
+
 
 
 {% endblock %}

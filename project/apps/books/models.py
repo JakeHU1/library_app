@@ -80,7 +80,7 @@ class Reservations(models.Model):
 class Reservations_books(models.Model):
     reservation = models.ForeignKey(Reservations, models.DO_NOTHING, )
     book = models.ForeignKey(Book, models.DO_NOTHING)
-    price = models.IntegerField()
+    quantity = models.IntegerField()
 
     class Meta:
         db_table = 'reservations_books'

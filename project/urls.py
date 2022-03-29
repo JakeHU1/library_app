@@ -34,6 +34,8 @@ urlpatterns = [
     path('logout/', auth_views.logout),
     path('register/', auth_views.register),
     path('profile/', auth_views.profile),
+    path('get_overview/', auth_views.get_overview),
+
 
     # password_reset --> https://ordinarycoders.com/blog/article/django-password-reset
     path('password_reset', auth_views.password_reset, name='password_reset'),
