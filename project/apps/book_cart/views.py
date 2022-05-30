@@ -44,14 +44,14 @@ def item_decrement(request, id):
 # TODO: this is really inefficient, but it works for now --> https://i.redd.it/6b7und8rs1v21.png
 def cart_clear(request):
     messages.error(request, "Cart cleared.")
-    session = request.session['cart']
+    session = request.session["cart"]
     # update the num_copies of each book in the cart
     for x in session:
-        book = session.get(x, {}).get('product_id')
-        amount = session.get(x, {}).get('quantity')
+        book = session.get(x, {}).get("product_id")
+        amount = session.get(x, {}).get("quantity")
         LibraryBook = Library.books.through
         library_book = LibraryBook.objects.get(book_id=book)
-        library_book.num_copies = F('num_copies') - amount
+        library_book.num_copies = F("num_copies") - amount
         library_book.save()
 
     # add new reservation for current user
@@ -59,9 +59,9 @@ def cart_clear(request):
 
     # add books to reservations
     for x in session:
-        book = session.get(x, {}).get('product_id')
-        quantity = session.get(x, {}).get('quantity')
-        n.books.add(book, through_defaults={'quantity': quantity})
+        book = session.get(x, {}).get("product_id")
+        quantity = session.get(x, {}).get("quantity")
+        n.books.add(book, through_defaults={"quantity": quantity})
 
     cart = Cart(request)
     cart.clear()
@@ -70,10 +70,11 @@ def cart_clear(request):
 
 @login_required(login_url="/login")
 def cart_detail(request):
-    session = request.session['cart']
+    session = request.session["cart"]
     total = 0
 
     for x in session:
-        total += float(session.get(x, {}).get('quantity')) * \
-            float(session.get(x, {}).get('price'))
-    return render(request, 'cart_detail.html', {'total': total})
+        total += float(session.get(x, {}).get("quantity")) * float(
+            session.get(x, {}).get("price")
+        )
+    return render(request, "cart_detail.html", {"total": total})

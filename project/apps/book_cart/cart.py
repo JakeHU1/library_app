@@ -5,7 +5,6 @@ from django.shortcuts import render, redirect
 
 
 class Cart(object):
-
     def __init__(self, request):
         self.request = request
         self.session = request.session
@@ -24,12 +23,12 @@ class Cart(object):
         if str(product.id) not in self.cart.keys():
 
             self.cart[product.id] = {
-                'userid': self.request.user.id,
-                'product_id': id,
-                'name': product.title,
-                'quantity': 1,
-                'price': str(product.price),
-                'image': product.thumbnail
+                "userid": self.request.user.id,
+                "product_id": id,
+                "name": product.title,
+                "quantity": 1,
+                "price": str(product.price),
+                "image": product.thumbnail,
             }
         else:
             newItem = True
@@ -37,19 +36,19 @@ class Cart(object):
             for key, value in self.cart.items():
                 if key == str(product.id):
 
-                    value['quantity'] = value['quantity'] + 1
+                    value["quantity"] = value["quantity"] + 1
                     newItem = False
                     self.save()
                     break
             if newItem == True:
 
                 self.cart[product.id] = {
-                    'userid': self.request,
-                    'product_id': product.id,
-                    'name': product.title,
-                    'quantity': 1,
-                    'price': str(product.price),
-                    'image': product.thumbnail
+                    "userid": self.request,
+                    "product_id": product.id,
+                    "name": product.title,
+                    "quantity": 1,
+                    "price": str(product.price),
+                    "image": product.thumbnail,
                 }
 
         self.save()
@@ -73,9 +72,9 @@ class Cart(object):
         for key, value in self.cart.items():
             if key == str(product.id):
 
-                value['quantity'] = value['quantity'] - 1
-                if(value['quantity'] < 1):
-                    return redirect('/cart/cart-detail/')
+                value["quantity"] = value["quantity"] - 1
+                if value["quantity"] < 1:
+                    return redirect("/cart/cart-detail/")
                 self.save()
                 break
             else:

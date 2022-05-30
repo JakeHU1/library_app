@@ -24,7 +24,7 @@ class Book(models.Model):
     price = models.FloatField()
 
     class Meta:
-        db_table = 'book'
+        db_table = "book"
 
 
 class Author(models.Model):
@@ -33,7 +33,7 @@ class Author(models.Model):
     books = models.ManyToManyField(Book)
 
     class Meta:
-        db_table = 'author'
+        db_table = "author"
 
 
 class Category(models.Model):
@@ -42,28 +42,30 @@ class Category(models.Model):
     books = models.ManyToManyField(Book)
 
     class Meta:
-        db_table = 'category'
+        db_table = "category"
 
 
 class Library(models.Model):
     library_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
-    books = models.ManyToManyField(Book, through='library_books')
+    books = models.ManyToManyField(Book, through="library_books")
 
     class Meta:
-        db_table = 'library'
+        db_table = "library"
 
 
 class Library_books(models.Model):
     library = models.ForeignKey(
-        Library, models.DO_NOTHING,)
+        Library,
+        models.DO_NOTHING,
+    )
     book = models.ForeignKey(Book, models.DO_NOTHING)
     num_copies = models.IntegerField()
 
     class Meta:
-        db_table = 'library_books'
-        unique_together = (('library', 'book'),)
-        default_related_name = 'library_books'
+        db_table = "library_books"
+        unique_together = (("library", "book"),)
+        default_related_name = "library_books"
 
 
 class Reservations(models.Model):
@@ -71,18 +73,21 @@ class Reservations(models.Model):
     customer = models.ForeignKey(User, models.DO_NOTHING)
     # Field name made lowercase.
     created_at = models.DateField(auto_now_add=True)
-    books = models.ManyToManyField(Book, through='reservations_books')
+    books = models.ManyToManyField(Book, through="reservations_books")
 
     class Meta:
-        db_table = 'reservations'
+        db_table = "reservations"
 
 
 class Reservations_books(models.Model):
-    reservation = models.ForeignKey(Reservations, models.DO_NOTHING, )
+    reservation = models.ForeignKey(
+        Reservations,
+        models.DO_NOTHING,
+    )
     book = models.ForeignKey(Book, models.DO_NOTHING)
     quantity = models.IntegerField()
 
     class Meta:
-        db_table = 'reservations_books'
-        unique_together = (('reservation', 'book'),)
-        default_related_name = 'reservations_books'
+        db_table = "reservations_books"
+        unique_together = (("reservation", "book"),)
+        default_related_name = "reservations_books"
